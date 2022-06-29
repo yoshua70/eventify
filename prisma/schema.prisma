@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  description String   @db.Text
+  date        String
+  category_id Int
+  profile_id  Int
+  createdAt   DateTime @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime @updatedAt @db.Timestamp(6)
+  Profile     Profile  @relation(fields: [profile_id], references: [id])
+  Category    Category @relation(fields: [category_id], references: [id])
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  description String   @db.Text
+  createdAt   DateTime @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime @updatedAt @db.Timestamp(6)
+  Event       Event[]
+}
+
+model Profile {
+  id        Int      @id @default(autoincrement())
+  user_id   Int      @unique
+  username  String   @unique @db.VarChar(50)
+  bio       String?  @db.Text
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
+  User      User     @relation(fields: [user_id], references: [id])
+  Event     Event[]
+}
+
+model User {
+  id               Int      @id @default(autoincrement())
+  supabase_user_id String   @unique @db.VarChar(255)
+  email            String   @unique @db.VarChar(100)
+  createdAt        DateTime @default(now()) @db.Timestamp(6)
+  updatedAt        DateTime @updatedAt @db.Timestamp(6)
+  Profile          Profile?
+}
