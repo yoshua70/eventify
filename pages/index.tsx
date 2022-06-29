@@ -1,18 +1,12 @@
 import type { NextPage } from "next";
-import Head from "next/head";
+import Layout from "../components/Layout";
 
 const Home: NextPage = () => {
   return (
-    <div>
-      <Head>
-        <title>Eventify</title>
-        <meta
-          name="description"
-          content="Create and share events with your friends"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-    </div>
+    <Layout title="Eventify - Home">
+      <h1>Eventify</h1>
+      <p>Create and share events with your friends.</p>
+    </Layout>
   );
 };
 
