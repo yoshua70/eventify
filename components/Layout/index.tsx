@@ -1,7 +1,7 @@
 import Head from "next/head";
 
 type AppProps = {
-  children: JSX.Element[];
+  children: JSX.Element[] | JSX.Element;
   title?: string;
 };
 
