@@ -1,10 +1,8 @@
 import { User } from "@supabase/supabase-js";
 import Layout from "components/Layout";
 import supabase from "lib/supabase";
-import { UserContext } from "lib/UserContext";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useContext } from "react";
 
 type PageProps = {
   user: User | null;
