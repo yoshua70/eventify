@@ -1,3 +1,4 @@
+import Navbar from "components/Navbar";
 import Head from "next/head";
 
 type AppProps = {
@@ -16,6 +17,7 @@ const Layout = ({ children, title }: AppProps) => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Navbar />
       {children}
     </div>
   );
