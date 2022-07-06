@@ -5,6 +5,7 @@ import supabase from "lib/supabase";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { ApiError } from "@supabase/supabase-js";
+import Link from "next/link";
 
 type FormValues = {
   email: string;
@@ -70,7 +71,9 @@ const SignInForm = () => {
       </form>
       <p>
         Vous ne possédez pas encore de compte ?{" "}
-        <a href="/sign-up">Inscrivez-vous</a>
+        <Link href="/sign-up">
+          <a>Inscrivez-vous</a>
+        </Link>
       </p>
     </div>
   );

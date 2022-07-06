@@ -2,22 +2,17 @@ import { User } from "@supabase/supabase-js";
 import Layout from "components/Layout";
 import supabase from "lib/supabase";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
-import { NextRequest } from "next/server";
 
 type PageProps = {
   user: User | null;
 };
 
-const ProfilePage: NextPage<PageProps> = ({ user }) => {
-  const router = useRouter();
-  const { user_id } = router.query;
-
+const ProfilePage: NextPage<PageProps> = () => {
   return (
     <Layout title="Bienvenu">
       <div className="flex flex-col gap-8 items-center justify-center py-4 px-2 my-8 mx-2">
         <h1 className="text-6xl font-bold">Akwaba</h1>
-        <p className="text-center">Bienvenu {user_id?.toString()}</p>
+        <p className="text-center">Bienvenu</p>
       </div>
     </Layout>
   );
@@ -25,7 +20,7 @@ const ProfilePage: NextPage<PageProps> = ({ user }) => {
 
 export default ProfilePage;
 
-export async function getServerSideProps(req: NextRequest) {
+export async function getServerSideProps({ req }) {
   const { user } = await supabase.auth.api.getUserByCookie(req);
 
   if (!user) {

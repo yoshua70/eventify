@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   };
 
   const checkUser = async () => {
-    const user = await supabase.auth.user();
+    const user = supabase.auth.user();
     if (user) setAuthenticatedState("authenticated");
   };
 
@@ -39,7 +39,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         handleAuthChange(event, session);
         if (event === "SIGNED_IN") {
           setAuthenticatedState("auhtenticated");
-          router.push(`/profile?user_id=${session?.user?.id}`);
+          router.push("/profile");
         }
         if (event === "SIGNED_OUT") {
           setAuthenticatedState("not-auhtenticated");
@@ -53,7 +53,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         };
       }
     );
-  }, []);
+  }, [router]);
 
   return (
     <UserContext.Provider value={authenticatedState}>

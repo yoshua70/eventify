@@ -1,6 +1,5 @@
 import supabase from "lib/supabase";
 import { useRouter } from "next/router";
-import { NextRequest } from "next/server";
 
 const EventsNew = () => {
   const router = useRouter();
@@ -10,7 +9,7 @@ const EventsNew = () => {
 
 export default EventsNew;
 
-export async function getServerSideProps(req: NextRequest) {
+export async function getServerSideProps(req) {
   const { user } = await supabase.auth.api.getUserByCookie(req);
 
   if (!user) {
