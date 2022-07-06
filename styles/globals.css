@@ -9,12 +9,13 @@ input {
   @apply px-4 py-2;
 }
 
-button {
+button,
+.btn {
   @apply w-full;
   @apply rounded;
-  @apply px-4 py-2;
-  @apply bg-blue-700 text-white font-bold;
-  @apply hover:bg-blue-600;
+  @apply px-4 py-2 no-underline;
+  @apply bg-blue-500 text-white font-bold text-center;
+  @apply hover:bg-blue-400;
 }
 
 a {

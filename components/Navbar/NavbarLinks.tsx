@@ -13,6 +13,7 @@ const NavbarItems = () => {
 
   return (
     <>
+      <NavbarItem to="/events" text="Plans" />
       {userAuthState === "not-authenticated" ? (
         <>
           <NavbarItem to="/sign-in" text="Connexion" />

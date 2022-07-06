@@ -3,6 +3,7 @@ import Layout from "components/Layout";
 import supabase from "lib/supabase";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
+import { NextRequest } from "next/server";
 
 type PageProps = {
   user: User | null;
@@ -24,7 +25,7 @@ const ProfilePage: NextPage<PageProps> = ({ user }) => {
 
 export default ProfilePage;
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps(req: NextRequest) {
   const { user } = await supabase.auth.api.getUserByCookie(req);
 
   if (!user) {
