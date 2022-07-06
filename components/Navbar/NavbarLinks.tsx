@@ -1,6 +1,6 @@
 import supabase from "lib/supabase";
 import { UserContext } from "lib/UserContext";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { NavbarItem } from "./NavbarItem";
 
 type NavbarLinksProps = {
