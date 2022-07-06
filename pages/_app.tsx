@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import supabase from "lib/supabase";
 import { AuthChangeEvent, Session } from "@supabase/supabase-js";
+import { UserContext } from "lib/UserContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [authenticatedState, setAuthenticatedState] =
@@ -29,6 +30,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   };
 
   useEffect(() => {
+    supabase.auth.user()
+      ? setAuthenticatedState("authenticated")
+      : setAuthenticatedState("not-authenticated");
+
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
         handleAuthChange(event, session);
@@ -36,7 +41,10 @@ function MyApp({ Component, pageProps }: AppProps) {
           setAuthenticatedState("auhtenticated");
           router.push(`/profile?user_id=${session?.user?.id}`);
         }
-        if (event === "SIGNED_OUT") setAuthenticatedState("not-auhtenticated");
+        if (event === "SIGNED_OUT") {
+          setAuthenticatedState("not-auhtenticated");
+          router.push("/sign-in");
+        }
 
         checkUser();
 
@@ -47,7 +55,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     );
   }, []);
 
-  return <Component {...pageProps} />;
+  return (
+    <UserContext.Provider value={authenticatedState}>
+      <Component {...pageProps} />
+    </UserContext.Provider>
+  );
 }
 
 export default MyApp;
