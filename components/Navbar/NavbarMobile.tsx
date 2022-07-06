@@ -1,38 +1,15 @@
-import supabase from "lib/supabase";
-import Link from "next/link";
+import { useState } from "react";
+import { NavbarLinks } from "./NavbarLinks";
 
-type ComponentProps = {
-  isVisible: boolean;
-};
-
-type NavbarItemProps = {
-  to: string;
-  text: string;
-};
-
-const NavbarItem = ({ to, text }: NavbarItemProps) => {
-  return (
-    <li>
-      <Link href={to}>
-        <a className="no-underline text-slate-800">{text}</a>
-      </Link>
-    </li>
-  );
-};
-
-export const NavbarMobile = ({ isVisible }: ComponentProps) => {
-  if (!isVisible) return null;
+export const NavbarMobile = () => {
+  const [isVisible, setIsVisible] = useState(false);
 
   return (
-    <ul className="flex flex-col items-center gap-4">
-      {!supabase.auth.user() ? (
-        <>
-          <NavbarItem to="/sign-in" text="Connexion" />
-          <NavbarItem to="/sign-up" text="Inscription" />
-        </>
-      ) : (
-        <NavbarItem to="/profile" text="Profile" />
-      )}
-    </ul>
+    <div className="flex flex-col md:hidden items-right">
+      <p onClick={() => setIsVisible(!isVisible)} className="text-right">
+        {!isVisible ? "open" : "close"}
+      </p>
+      <NavbarLinks isVisible={isVisible} className="flex flex-col items-end" />
+    </div>
   );
 };
