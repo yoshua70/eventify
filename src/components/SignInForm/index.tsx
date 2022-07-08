@@ -1,45 +1,42 @@
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { UserSignUpSchema } from "helpers/yup-schema/UserSignUpSchema";
+import { useForm } from "react-hook-form";
+import { UserSignInSchema } from "utils/yup-schema/UserSignInSchema";
+import supabase from "lib/supabase";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { ApiError } from "@supabase/supabase-js";
+import Link from "next/link";
 
 type FormValues = {
   email: string;
   password: string;
-  password_confirmation: string;
 };
 
-const SignUpForm = () => {
+const SignInForm = () => {
   const router = useRouter();
+  const [authError, setAuthError] = useState<ApiError | null>();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: yupResolver(UserSignUpSchema),
+    resolver: yupResolver(UserSignInSchema),
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    const res = await fetch("/api/register", {
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
+    const { user, error } = await supabase.auth.signIn({
+      email: data.email,
+      password: data.password,
     });
 
-    const { user } = await res.json();
-
-    if (user) router.push(`/welcome?email=${user.email}`);
+    if (error) setAuthError(error);
+    if (user) router.push(`/profile?user_id${user.id}`);
   });
 
   return (
     <div className="flex flex-col bg-white rounded drop-shadow-sm px-4 py-2 w-full sm:max-w-md items-center">
-      <h1 className="text-xl font-bold">Inscription</h1>
+      <h1 className="text-xl font-bold">Connexion</h1>
       <form className="flex flex-col w-full gap-4 my-8" onSubmit={onSubmit}>
         <div className="animated-translate-y">
           <label htmlFor="email">Email</label>
@@ -63,30 +60,23 @@ const SignUpForm = () => {
             <p className="text-sx text-red-700">{errors.password.message}</p>
           )}
         </div>
-        <div className="animated-translate-y">
-          <label htmlFor="password_confirmation">
-            Confirmez le mot de passe
-          </label>
-          <input
-            {...register("password_confirmation")}
-            type="password"
-            placeholder="confirm password..."
-          />
-          {errors?.password_confirmation && (
-            <p className="text-sx text-red-700">
-              {errors.password_confirmation.message}
-            </p>
-          )}
-        </div>
+        {authError && (
+          <div className="animated-translate-y">
+            <p className="text-sx text-red-700">{authError.message}</p>
+          </div>
+        )}
         <button className="animated-translate-y bg-blue-700" type="submit">
-          Inscription
+          Connexion
         </button>
       </form>
       <p>
-        Vous possédez déjà un compte ? <a href="/sign-in">Connectez-vous</a>
+        Vous ne possédez pas encore de compte ?{" "}
+        <Link href="/sign-up">
+          <a>Inscrivez-vous</a>
+        </Link>
       </p>
     </div>
   );
 };
 
-export default SignUpForm;
+export default SignInForm;

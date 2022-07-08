@@ -1,4 +1,4 @@
-import { UserContext } from "lib/UserContext";
+import { UserContext } from "context/UserContext";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useContext } from "react";

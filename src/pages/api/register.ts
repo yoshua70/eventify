@@ -26,7 +26,5 @@ export default async function registerUser(
     },
   });
 
-  console.log(newUser);
-
   return res.status(200).json({ user: user });
 }

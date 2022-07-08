@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import supabase from "lib/supabase";
 import { AuthChangeEvent, Session } from "@supabase/supabase-js";
-import { UserContext } from "lib/UserContext";
+import { UserContext } from "context/UserContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [authenticatedState, setAuthenticatedState] =

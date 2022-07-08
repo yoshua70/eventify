@@ -1,5 +1,5 @@
 import supabase from "lib/supabase";
-import { UserContext } from "lib/UserContext";
+import { UserContext } from "context/UserContext";
 import { useContext } from "react";
 import { NavbarItem } from "./NavbarItem";
 
