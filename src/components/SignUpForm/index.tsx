@@ -2,6 +2,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { UserSignUpSchema } from "utils/yup-schema/UserSignUpSchema";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import { useMutation } from "react-query";
+import LoadingSpinner from "components/LoadingScreen";
 
 type FormValues = {
   email: string;
@@ -12,15 +15,7 @@ type FormValues = {
 const SignUpForm = () => {
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>({
-    resolver: yupResolver(UserSignUpSchema),
-  });
-
-  const onSubmit = handleSubmit(async (data) => {
+  const mutation = useMutation(async (data: FormValues) => {
     const res = await fetch("/api/register", {
       body: JSON.stringify({
         email: data.email,
@@ -34,13 +29,33 @@ const SignUpForm = () => {
 
     const { user } = await res.json();
 
-    if (user) router.push(`/welcome?email=${user.email}`);
+    return user;
   });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: yupResolver(UserSignUpSchema),
+  });
+
+  if (mutation.isLoading)
+    return (
+      <div className="flex flex-col gap-4 w-full items-center">
+        <p>On vérifie le kpla...</p>
+        <LoadingSpinner color="#000" loading={true} />
+      </div>
+    );
+  if (mutation.isSuccess) router.push("/welcome");
 
   return (
     <div className="flex flex-col bg-white rounded drop-shadow-sm px-4 py-2 w-full sm:max-w-md items-center">
       <h1 className="text-xl font-bold">Inscription</h1>
-      <form className="flex flex-col w-full gap-4 my-8" onSubmit={onSubmit}>
+      <form
+        className="flex flex-col w-full gap-4 my-8"
+        onSubmit={handleSubmit((data) => mutation.mutate(data))}
+      >
         <div className="animated-translate-y">
           <label htmlFor="email">Email</label>
           <input
@@ -83,7 +98,10 @@ const SignUpForm = () => {
         </button>
       </form>
       <p>
-        Vous possédez déjà un compte ? <a href="/sign-in">Connectez-vous</a>
+        Vous possédez déjà un compte ?{" "}
+        <Link href="/sign-in">
+          <a>Connectez-vous</a>
+        </Link>
       </p>
     </div>
   );

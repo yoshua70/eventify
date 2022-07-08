@@ -5,6 +5,9 @@ import { useRouter } from "next/router";
 import supabase from "lib/supabase";
 import { AuthChangeEvent, Session } from "@supabase/supabase-js";
 import { UserContext } from "context/UserContext";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [authenticatedState, setAuthenticatedState] =
@@ -56,9 +59,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [router]);
 
   return (
-    <UserContext.Provider value={authenticatedState}>
-      <Component {...pageProps} />
-    </UserContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <UserContext.Provider value={authenticatedState}>
+        <Component {...pageProps} />
+      </UserContext.Provider>
+    </QueryClientProvider>
   );
 }
 
