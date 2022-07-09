@@ -22,7 +22,7 @@ const ProfileForm = ({ user }: ComponentProps) => {
   });
 
   const mutation = useMutation(async (data: FormValues) => {
-    const res = await fetch("/api/users/new", {
+    const res = await fetch("/api/profiles/upsert", {
       body: JSON.stringify({
         username: data.username,
         bio: data.bio,
@@ -35,7 +35,7 @@ const ProfileForm = ({ user }: ComponentProps) => {
     });
 
     const userData = await res.json();
-    console.log(userData);
+
     return userData;
   });
 
