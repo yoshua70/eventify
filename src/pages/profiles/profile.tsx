@@ -10,10 +10,7 @@ type PageProps = {
 const ProfilePage: NextPage<PageProps> = () => {
   return (
     <Layout title="Bienvenu">
-      <div className="flex flex-col gap-8 items-center justify-center py-4 px-2 my-8 mx-2">
-        <h1 className="text-6xl font-bold">Akwaba</h1>
-        <p className="text-center">Bienvenu</p>
-      </div>
+      <div className="flex flex-col gap-8 items-center justify-center py-4 px-2 my-8 mx-2"></div>
     </Layout>
   );
 };
