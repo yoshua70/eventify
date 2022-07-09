@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-input {
+input,
+textarea {
   @apply bg-slate-300;
   @apply w-full;
   @apply rounded;
