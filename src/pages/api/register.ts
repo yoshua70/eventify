@@ -19,12 +19,16 @@ export default async function registerUser(
   // that matches the one created for the supabase auth
   // since we can't query the later.
 
-  const newUser = await prisma.user.create({
-    data: {
-      email: user?.email!,
-      supabase_user_id: user?.id!,
-    },
-  });
+  const newUser = await prisma.user
+    .create({
+      data: {
+        email: user?.email!,
+        supabase_user_id: user?.id!,
+      },
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
 
   return res.status(200).json({ user: user });
 }

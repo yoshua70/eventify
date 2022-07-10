@@ -13,12 +13,16 @@ export default async function handler(
       .status(401)
       .json({ error: "Unauthorized. User is not logged in on the server." });
 
-  const userData = await prisma.user.findFirst({
-    where: { email: req.body.email },
-    select: {
-      supabase_user_id: true,
-    },
-  });
+  const userData = await prisma.user
+    .findFirst({
+      where: { email: req.body.email },
+      select: {
+        supabase_user_id: true,
+      },
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
 
   if (!(userData?.supabase_user_id === user.data?.id))
     return res.status(401).json({
@@ -26,17 +30,21 @@ export default async function handler(
         "Unauthorized. You're not the user you try to update the information.",
     });
 
-  const userProfile = await prisma.user.update({
-    where: { email: req.body.email },
-    data: {
-      profile: {
-        upsert: {
-          create: { username: req.body.username, bio: req.body.bio },
-          update: { username: req.body.username, bio: req.body.bio },
+  const userProfile = await prisma.user
+    .update({
+      where: { email: req.body.email },
+      data: {
+        profile: {
+          upsert: {
+            create: { username: req.body.username, bio: req.body.bio },
+            update: { username: req.body.username, bio: req.body.bio },
+          },
         },
       },
-    },
-  });
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
 
   return res.status(200).json({ ...userProfile });
 }

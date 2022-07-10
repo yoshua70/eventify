@@ -11,7 +11,7 @@ type PageProps = {
 const ProfilePage: NextPage<PageProps> = ({ user }: PageProps) => {
   return (
     <Layout title="Bienvenu">
-      <div className="flex flex-col gap-8 justify-center py-4 px-2 my-8 mx-2 w-full">
+      <div className="flex flex-col gap-8 justify-center items-center py-4 px-2 my-8 mx-2 w-full">
         <h1 className="text-4xl">Profil</h1>
         <ProfileForm user={user} />
       </div>
