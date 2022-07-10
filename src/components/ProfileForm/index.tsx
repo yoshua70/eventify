@@ -48,6 +48,8 @@ const ProfileForm = ({ user }: ComponentProps) => {
     resolver: yupResolver(UserProfileSchema),
   });
 
+  console.log(data);
+
   if (mutation.isLoading)
     return <LoadingSpinner loading={mutation.isLoading} color="#000000" />;
 
