@@ -10,7 +10,10 @@ export const NavbarMobile = () => {
 
   return (
     <div className="flex flex-col md:hidden items-right">
-      <p onClick={() => setIsVisible(!isVisible)} className="text-right">
+      <p
+        onClick={() => setIsVisible(!isVisible)}
+        className="text-right hover:cursor-pointer"
+      >
         {!isVisible ? (
           <>
             Menu <FontAwesomeIcon icon={faCircle} />
