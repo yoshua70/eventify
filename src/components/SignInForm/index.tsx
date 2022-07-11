@@ -45,7 +45,7 @@ const SignInForm = () => {
       </div>
     );
 
-  if (mutation.isSuccess) router.push("/profiles/profile");
+  if (mutation.isSuccess) router.push("/profiles/");
 
   return (
     <div className="flex flex-col bg-white rounded drop-shadow-sm px-4 py-2 w-full sm:max-w-md items-center">

@@ -1,28 +1,30 @@
+import { Profile, User } from ".prisma/client";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { User } from "@supabase/supabase-js";
 import LoadingSpinner from "components/LoadingScreen";
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { UserProfileSchema } from "utils/yup-schema/UserProfileSchema";
 
-type ComponentProps = {
-  user: User | null;
-};
-
 type FormValues = {
+  email: string;
   username: string;
   bio: string;
-  email: string;
 };
 
-const ProfileForm = ({ user }: ComponentProps) => {
-  const { isLoading, error, data } = useQuery(["userData"], async () => {
-    const res = await fetch(`/api/users/${user?.id}`).then((res) => res.json());
-    return res;
+const ProfileForm: React.FC<{ user: User & { profile: Profile | null } }> = ({
+  user,
+}) => {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: yupResolver(UserProfileSchema),
   });
 
   const mutation = useMutation(async (data: FormValues) => {
-    const res = await fetch("/api/profiles/upsert", {
+    const res = await fetch("/api/profiles/update", {
       body: JSON.stringify({
         username: data.username,
         bio: data.bio,
@@ -34,30 +36,11 @@ const ProfileForm = ({ user }: ComponentProps) => {
       method: "POST",
     });
 
-    const userData = await res.json();
-
-    return userData;
+    return await res.json();
   });
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<FormValues>({
-    resolver: yupResolver(UserProfileSchema),
-  });
-
-  console.log(data);
 
   if (mutation.isLoading)
     return <LoadingSpinner loading={mutation.isLoading} color="#000000" />;
-
-  if (isLoading) return <LoadingSpinner loading={isLoading} color="#000000" />;
-
-  if (!data.email) return <p>User not found</p>;
-
-  if (error) return <p>Le kpla n&apos;est pas bon</p>;
 
   return (
     <div className="flex flex-col bg-white rounded drop-shadow-sm px-4 py-2 w-full sm:max-w-md items-center">
@@ -71,7 +54,7 @@ const ProfileForm = ({ user }: ComponentProps) => {
             {...register("email")}
             type="text"
             placeholder="john.doe18@inphb.ci"
-            defaultValue={data.email}
+            defaultValue={user.email}
             disabled={true}
           />
           {errors?.email && (
@@ -84,7 +67,7 @@ const ProfileForm = ({ user }: ComponentProps) => {
             {...register("username")}
             type="text"
             placeholder="JohDoe"
-            defaultValue={data.profile && data.profile.username}
+            defaultValue={user.profile ? user.profile.username : ""}
           />
           {errors?.username && (
             <p className="text-sx text-red-700">{errors.username.message}</p>
@@ -95,7 +78,7 @@ const ProfileForm = ({ user }: ComponentProps) => {
           <textarea
             {...register("bio")}
             placeholder="The OG one."
-            defaultValue={data.profile && data.profile.bio}
+            defaultValue={user.profile?.bio ? user.profile.bio : ""}
           ></textarea>
           {errors?.bio && (
             <p className="text-sx text-red-700">{errors.bio.message}</p>
@@ -104,7 +87,7 @@ const ProfileForm = ({ user }: ComponentProps) => {
         <button
           className="animated-translate-y bg-blue-700"
           type="submit"
-          onClick={() => setValue("email", data.email)}
+          onClick={() => setValue("email", user.email)}
         >
           Mettre à jour
         </button>

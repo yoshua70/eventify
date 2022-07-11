@@ -32,7 +32,7 @@ export default async function handler(
       errors: {
         code: 401,
         message:
-          "Unauthorized. You're not the user you try to update the information.",
+          "Unauthorized. You're not the user whom you try to update the information.",
       },
     });
 
@@ -52,5 +52,5 @@ export default async function handler(
       await prisma.$disconnect();
     });
 
-  return res.status(200).json({ data: { ...userProfile } });
+  return res.status(200).json({ data: { user: userProfile } });
 }

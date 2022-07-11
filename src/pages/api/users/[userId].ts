@@ -8,7 +8,7 @@ export default async function handler(
   const { userId } = req.query;
 
   if (!userId) {
-    return res.status(404).json({ error: "No user id provide." });
+    return res.status(404).json({ error: "No user id provided." });
   }
 
   const user = await prisma.user
@@ -22,5 +22,5 @@ export default async function handler(
       await prisma.$disconnect();
     });
 
-  return res.status(200).json({ ...user });
+  return res.status(200).json({ user });
 }

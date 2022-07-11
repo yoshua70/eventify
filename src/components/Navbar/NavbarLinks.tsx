@@ -21,7 +21,7 @@ const NavbarItems = () => {
         </>
       ) : (
         <>
-          <NavbarItem to="/profiles/profile" text="Profil" />
+          <NavbarItem to="/profiles/" text="Profil" />
           <li
             onClick={() => supabase.auth.signOut()}
             className="no-underline text-slate-800"
