@@ -1,12 +1,10 @@
 import Layout from "components/Layout";
 import supabase from "lib/supabase";
-import { useQuery } from "react-query";
 import { GetServerSideProps } from "next";
 import { User } from "@supabase/supabase-js";
 import LoadingSpinner from "components/LoadingScreen";
-import { useUserData } from "hooks";
+import { useUserData } from "hooks/useUserData";
 import ProfileForm from "components/ProfileForm";
-import { useEffect } from "react";
 
 const ProfilePage: React.FC<{ user: User }> = ({ user }) => {
   const { data, isLoading } = useUserData(user.id);
